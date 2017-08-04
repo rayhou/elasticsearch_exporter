@@ -20,6 +20,7 @@ func main() {
 		listenAddress      = flag.String("web.listen-address", ":9108", "Address to listen on for web interface and telemetry.")
 		metricsPath        = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 		esURI              = flag.String("es.uri", "http://localhost:9200", "HTTP API address of an Elasticsearch node.")
+		URI_path_list      = flag.String("es.uri-path-list", "", "URI paths to query.")
 		esTimeout          = flag.Duration("es.timeout", 5*time.Second, "Timeout for trying to get stats from Elasticsearch.")
 		esAllNodes         = flag.Bool("es.all", false, "Export stats for all nodes in the cluster.")
 		esCA               = flag.String("es.ca", "", "Path to PEM file that conains trusted CAs for the Elasticsearch connection.")
@@ -55,6 +56,13 @@ func main() {
 
 	prometheus.MustRegister(collector.NewClusterHealth(logger, httpClient, esURL))
 	prometheus.MustRegister(collector.NewNodes(logger, httpClient, esURL, *esAllNodes))
+
+
+	if len(*URI_path_list) > 0 {
+		for _, URI_path := range strings.Split(*URI_path_list, ",") {
+			prometheus.MustRegister(collector.NewGenericQuery(logger, httpClient, esURL, URI_path))
+		}
+	}
 
 	http.Handle(*metricsPath, prometheus.Handler())
 	http.HandleFunc("/", IndexHandler(*metricsPath))
