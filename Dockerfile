@@ -10,4 +10,3 @@ RUN \
     go install
 
 EXPOSE      9108
-ENTRYPOINT  [ "elasticsearch_exporter" ]
