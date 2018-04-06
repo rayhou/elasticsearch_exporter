@@ -57,13 +57,13 @@ func main() {
 	prometheus.MustRegister(collector.NewClusterHealth(logger, httpClient, esURL))
 	prometheus.MustRegister(collector.NewNodes(logger, httpClient, esURL, *esAllNodes))
 
+	level.Info(logger).Log(
+		"msg", "URI_paths",
+		"path", *URI_path_list,
+	)
 
 	if len(*URI_path_list) > 0 {
 		for _, URI_path := range strings.Split(*URI_path_list, ",") {
-			level.Info(logger).Log(
-				"msg", "URI_path",
-				"path", URI_path,
-			)
 			prometheus.MustRegister(collector.NewGenericQuery(logger, httpClient, esURL, URI_path))
 		}
 	}
