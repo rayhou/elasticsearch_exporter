@@ -58,18 +58,18 @@ func main() {
 	prometheus.MustRegister(collector.NewNodes(logger, httpClient, esURL, *esAllNodes))
 
 	level.Info(logger).Log(
-		"msg", "es_uri",
-		"path", *es_URI,
-		"msg", "es_all",
-		"path", *esAllNodes,
-		"msg", "listen",
-		"path", *listenAddress,
-		"msg", "timeout",
-		"path", *esTimeout,
-		"msg", "telemetry",
-		"path", *metricsPath,
-		"msg", "URI_paths",
-		"path", *URI_path_list,
+		"msg1", "es_uri",
+		"msg2", *esURI,
+		"msg3", "es_all",
+		"msg4", *esAllNodes,
+		"msg5", "listen",
+		"msg6", *listenAddress,
+		"msg7", "timeout",
+		"msg8", *esTimeout,
+		"msg9", "telemetry",
+		"msg10", *metricsPath,
+		"msg11", "URI_paths",
+		"msg12", *URI_path_list,
 	)
 
 	if len(*URI_path_list) > 0 {
