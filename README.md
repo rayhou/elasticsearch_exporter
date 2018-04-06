@@ -2,7 +2,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/justwatch/elasticsearch_exporter.svg?maxAge=604800)](https://hub.docker.com/r/justwatch/elasticsearch_exporter)
 [![Go Report Card](https://goreportcard.com/badge/github.com/justwatchcom/elasticsearch_exporter)](https://goreportcard.com/report/github.com/justwatchcom/elasticsearch_exporter)
 
-Prometheus exporter for various metrics about ElasticSearch, written in Go.
+Prometheus exporter for various metrics about ElasticSearch, written in Go.  Forked to allow this to process queries passed in via command line / docker-compose.  Code to process any query ported from [https://github.com/sciffer/json_exporter](https://github.com/sciffer/json_exporter)
 
 ### Installation
 
@@ -20,9 +20,9 @@ Example `docker-compose.yml`:
 
 ```yaml
 elasticsearch_exporter:
-    image: justwatch/elasticsearch_exporter:1.0.1
+    image: rayhou/elasticsearch_exporter
     command:
-     - '-es.uri=http://elasticsearch:9200'
+     - '-es.uri=http://elasticsearch:9200' --es.all=true --web.listen-address=:9108 --web.telemetry-path=/metrics --es.timeout=30s --es.uri-path-list="/_stats,/_cluster/stats"'
     restart: always
     ports:
     - "127.0.0.1:9108:9108"
@@ -44,6 +44,7 @@ elasticsearch_exporter --help
 | es.client-cert        | Path to PEM file that contains the corresponding cert for the private key to connect to Elasticsearch.
 | web.listen-address    | Address to listen on for web interface and telemetry. |
 | web.telemetry-path    | Path under which to expose metrics. |
+| es.uri-path-list      | Comma separated list of additional paths to query |
 
 ### Metrics
 

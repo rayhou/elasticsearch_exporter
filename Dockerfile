@@ -1,14 +1,13 @@
-FROM quay.io/prometheus/golang-builder as builder
+FROM golang:alpine
+
+RUN apk update && apk add --update alpine-sdk
 
 ADD .   /go/src/github.com/justwatchcom/elasticsearch_exporter
-WORKDIR /go/src/github.com/justwatchcom/elasticsearch_exporter
 
-RUN make
-
-FROM        quay.io/prometheus/busybox:latest
-MAINTAINER  The Prometheus Authors <prometheus-developers@googlegroups.com>
-
-COPY --from=builder /go/src/github.com/justwatchcom/elasticsearch_exporter/elasticsearch_exporter  /bin/elasticsearch_exporter
+RUN \
+    cd /go/src/github.com/justwatchcom/elasticsearch_exporter && \
+    go build && \
+    go install
 
 EXPOSE      9108
-ENTRYPOINT  [ "/bin/elasticsearch_exporter" ]
+ENTRYPOINT  [ "elasticsearch_exporter" ]
