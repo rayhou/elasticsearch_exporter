@@ -46,7 +46,7 @@ func GetSubsystem(URI_path string) string {
 }
 
 func GetClusterName(logger log.Logger, client *http.Client, url *url.URL) (string, error) {
-	url.Path = "/_nodes/uuddlrlrba"
+	url.Path = ""
 	var name_response NameResponse
 	resp, err := client.Get(url.String())
 	if err != nil {
